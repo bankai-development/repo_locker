@@ -14,16 +14,21 @@ defmodule RepoLocker.MixProject do
   def application do
     [
       extra_applications: [:logger],
-      mod: {RepoLocker.Application, []}
+      mod: {RepoLocker.Application, [env: Mix.env()]},
+      applications: applications(Mix.env())
     ]
   end
 
+  defp applications(:test), do: applications(:default) ++ [:cowboy, :plug]
+  defp applications(_), do: [:httpoison]
+
   defp deps do
     [
-      {:plug_cowboy, "~> 2.0"},
       {:credo, "~> 1.1.1", only: [:dev, :test], runtime: false},
       {:excoveralls, "~> 0.10", only: :test},
-      {:httpoison, "~> 1.4"}
+      {:httpoison, "~> 1.4"},
+      {:jason, "~> 1.1"},
+      {:plug_cowboy, "~> 2.0"}
     ]
   end
 end

@@ -3,11 +3,18 @@ defmodule RepoLocker.Application do
 
   use Application
 
-  def start(_type, _args) do
-    children = [
-      # Starts a worker by calling: RepoLocker.Worker.start_link(arg)
-      # {RepoLocker.Worker, arg}
-    ]
+  def start(_type, args) do
+    children =
+      case args do
+        [env: :test] ->
+          [
+            {Plug.Cowboy,
+             scheme: :http, plug: RepoLocker.Clients.GithubMockServer, options: [port: 8081]}
+          ]
+
+        [_] ->
+          []
+      end
 
     opts = [strategy: :one_for_one, name: RepoLocker.Supervisor]
     Supervisor.start_link(children, opts)
