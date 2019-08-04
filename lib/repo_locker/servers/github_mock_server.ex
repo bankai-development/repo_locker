@@ -30,7 +30,7 @@ defmodule RepoLocker.Servers.GithubMockServer do
     |> success(conn)
   end
   
-  defp success(body \\ "", conn) do
+  defp success(body, conn) do
     conn
     |> Plug.Conn.send_resp(200, body)
   end
@@ -40,10 +40,10 @@ defmodule RepoLocker.Servers.GithubMockServer do
     |> Plug.Conn.send_resp(422, Jason.encode!(%{message: "error message"}))
   end
 
-  defp json_response(path_to_file, bindings \\ [], options \\ []) do
+  defp json_response(path_to_file, bindings) do
     [@response_base_path, path_to_file]
     |> Enum.join
     |> Path.expand
-    |> EEx.eval_file(bindings, options)
+    |> EEx.eval_file(bindings)
   end
 end

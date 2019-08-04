@@ -10,7 +10,7 @@ defmodule RepoLocker.Clients.Github do
     case __MODULE__.put!("/repos/#{user}/#{repo}/branches/master/protection", lock_settings_json, [], []) do
       %{:status_code => 200, :body => body} ->
         {:ok, translate_locks(body)}
-      %{:status_code => status, :body => body} -> 
+      %{:status_code => _status, :body => body} -> 
         {:error, body["message"]}
     end
   end
