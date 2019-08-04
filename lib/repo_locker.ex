@@ -4,8 +4,8 @@ defmodule RepoLocker do
   """
   alias RepoLocker.Clients.Github, as: GithubClient
 
-  @spec lock(String.t(), String.t()) :: {:ok, String.t()} | {:error, String.t()}
-  def lock(org_name, repo_name) do
-    GithubClient.put("/repos/#{org_name}/#{repo_name}/branches/master/protection", [], [])
+  @spec lock(String.t(), String.t()) :: {:ok, RepoLocker.Locks.t()} | {:error, String.t()}
+  def lock(user, repo) do
+    GithubClient.lock(user, repo)
   end
 end
