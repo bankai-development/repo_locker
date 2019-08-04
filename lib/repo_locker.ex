@@ -6,6 +6,6 @@ defmodule RepoLocker do
 
   @spec lock(String.t(), String.t()) :: {:ok, String.t()} | {:error, String.t()}
   def lock(org_name, repo_name) do
-    GithubClient.get("/repos/#{org_name}/#{repo_name}/branches")
+    GithubClient.put("/repos/#{org_name}/#{repo_name}/branches/master/protection", [], [])
   end
 end

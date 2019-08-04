@@ -9,7 +9,7 @@ defmodule RepoLocker.Application do
         [env: :test] ->
           [
             {Plug.Cowboy,
-             scheme: :http, plug: RepoLocker.Clients.GithubMockServer, options: [port: 8081]}
+             scheme: :http, plug: RepoLocker.Servers.GithubMockServer, options: [port: 8081]}
           ]
 
         [_] ->

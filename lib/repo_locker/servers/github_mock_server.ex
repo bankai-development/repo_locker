@@ -1,4 +1,4 @@
-defmodule RepoLocker.Clients.GithubMockServer do
+defmodule RepoLocker.Servers.GithubMockServer do
   @moduledoc """
   Github Mock Server for Testing
   """
@@ -6,15 +6,19 @@ defmodule RepoLocker.Clients.GithubMockServer do
 
   plug(Plug.Parsers,
     parsers: [:json],
-    pass: ["text/*"],
+    pass: ["*/*"],
     json_decoder: Jason
   )
 
   plug(:match)
   plug(:dispatch)
 
-  get "/repos/:org_name/:repo_name/branches" do
-    success(conn, %{})
+  get "/healthz" do
+    success(conn, %{"status" => "alive"})
+  end
+
+  put "/repos/:owner/:repo/branches/:branch/protection" do
+    success(conn, %{"owner" => owner})
   end
 
   defp success(conn, body \\ "") do
