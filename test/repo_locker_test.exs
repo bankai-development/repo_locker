@@ -1,5 +1,5 @@
 defmodule RepoLockerTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
 
   describe "lock" do
     test "sets permissions on master branch and returns locks" do

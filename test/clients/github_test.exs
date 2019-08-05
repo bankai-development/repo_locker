@@ -1,5 +1,5 @@
 defmodule RepoLocker.Clients.GithubTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
 
   alias RepoLocker.Clients.Github
 
