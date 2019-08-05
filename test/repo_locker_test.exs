@@ -17,8 +17,6 @@ defmodule RepoLockerTest do
              }
     end
 
-    1
-
     test "returns a message when failing" do
       {:error, msg} = RepoLocker.lock('bad-owner', 'repo-name')
       assert msg == "error message"
