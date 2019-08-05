@@ -4,6 +4,8 @@ defmodule RepoLocker.Servers.LockerServer do
   """
   use Plug.Router
 
+  plug(RepoLocker.Authentication)
+
   if Mix.env() == :dev do
     use Plug.Debugger
   end

@@ -19,7 +19,13 @@ defmodule RepoLocker.Application do
           ]
 
         [_] ->
-          [locker_server()]
+          [
+            Plug.Cowboy.child_spec(
+              scheme: :http,
+              plug: RepoLocker.Servers.LockerServer,
+              options: [port: System.get_env()["PORT"] || 4000]
+            )
+          ]
       end
 
     opts = [strategy: :one_for_one, name: RepoLocker.Supervisor]
@@ -27,10 +33,5 @@ defmodule RepoLocker.Application do
   end
 
   def locker_server() do
-    Plug.Cowboy.child_spec(
-      scheme: :http,
-      plug: RepoLocker.Servers.LockerServer,
-      options: [port: System.get_env()["PORT"] || 4000]
-    )
   end
 end

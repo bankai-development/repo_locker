@@ -21,7 +21,6 @@ defmodule RepoLocker.Server.LockerServerTest do
   test "server returns healthy and 200" do
     conn = conn(:get, "/healthz")
     conn = LockerServer.call(conn, @server)
-
     assert conn.status == 200
   end
 
@@ -61,5 +60,41 @@ defmodule RepoLocker.Server.LockerServerTest do
       |> LockerServer.call(@server)
 
     assert conn.status == 404
+  end
+
+  test "basic authentication works with valid passwords" do
+    System.put_env("REPO_LOCKER_USER", "user")
+    System.put_env("REPO_LOCKER_PASS", "pass")
+
+    conn = conn(:get, "/healthz")
+
+    conn =
+      conn
+      |> with_basic_auth("user", "pass")
+      |> LockerServer.call(@server)
+
+    assert conn.status == 200
+  end
+
+  test "basic authentication does not work with invalid passwords" do
+    System.put_env("REPO_LOCKER_USER", "user")
+    System.put_env("REPO_LOCKER_PASS", "pass")
+
+    conn = conn(:get, "/healthz")
+
+    conn =
+      conn
+      |> with_basic_auth("user2", "pass2")
+      |> LockerServer.call(@server)
+
+    assert conn.status == 401
+  end
+
+  defp with_basic_auth(conn, user, pass) do
+    header = "Basic " <> Base.encode64("#{user}:#{pass}")
+
+    conn
+    |> put_req_header("authorization", header)
+    |> put_req_header("x-force-auth", "true")
   end
 end

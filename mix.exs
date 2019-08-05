@@ -25,7 +25,7 @@ defmodule RepoLocker.MixProject do
       {:excoveralls, "~> 0.10", only: :test},
       {:httpoison, "~> 1.4"},
       {:jason, "~> 1.1"},
-      {:plug_cowboy, "~> 2.0"}
+      {:plug_cowboy, "~> 2.1.0"}
     ]
   end
 end

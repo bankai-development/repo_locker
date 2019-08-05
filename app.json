@@ -1,0 +1,24 @@
+{
+  "name": "Repo Locker",
+  "description": "Automatically lock your repos on creation.",
+  "repository": "https://github.com/bankai-development/repo_locker",
+  "addons": [],
+  "buildpacks": [
+    {
+      "url": "https://github.com/HashNuke/heroku-buildpack-elixir.git"
+    },
+  ],
+  "formation": {
+    "web": {
+      "quantity": 1,
+      "size": "Free"
+    }
+  },
+  "env": {
+    "MIX_ENV": "prod",
+    "REPO_LOCKER_USER": "repo-locker-user",
+    "REPO_LOCKER_PASS": {
+      "generator": "secret"
+    }
+  }
+}
