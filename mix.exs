@@ -1,11 +1,13 @@
 defmodule RepoLocker.MixProject do
   use Mix.Project
 
+  @elixir_version "~> 1.9"
+
   def project do
     [
       app: :repo_locker,
       version: "0.9.0",
-      elixir: "~> 1.9",
+      elixir: @elixir_version,
       start_permanent: Mix.env() == :prod,
       deps: deps()
     ]
