@@ -6,11 +6,16 @@ defmodule RepoLocker.Application do
 
   def start(_type, args) do
     Logger.info("Starting Repo Locker ...")
+
     children =
       case args do
         [env: :test] ->
           [
-            Plug.Cowboy.child_spec(scheme: :http, plug: RepoLocker.Servers.GithubMockServer, options: [port: 8081]),
+            Plug.Cowboy.child_spec(
+              scheme: :http,
+              plug: RepoLocker.Servers.GithubMockServer,
+              options: [port: 8081]
+            )
           ]
 
         [_] ->
@@ -22,6 +27,10 @@ defmodule RepoLocker.Application do
   end
 
   defp locker_server do
-    Plug.Cowboy.child_spec(scheme: :http, plug: RepoLocker.Servers.LockerServer, options: [port: 8080])
+    Plug.Cowboy.child_spec(
+      scheme: :http,
+      plug: RepoLocker.Servers.LockerServer,
+      options: [port: 8080]
+    )
   end
 end
