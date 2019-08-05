@@ -4,6 +4,8 @@ defmodule RepoLocker.Authentication do
   """
   import Plug.Conn
 
+  @env Mix.env
+
   def init(options), do: options
 
   def call(conn, _opts) do
@@ -24,7 +26,7 @@ defmodule RepoLocker.Authentication do
   end
 
   def basic_auth_disabled(conn) do
-    List.keyfind(conn.req_headers, "x-force-auth", 0) == nil && Mix.env() == :test
+    List.keyfind(conn.req_headers, "x-force-auth", 0) == nil && @env == :test
   end
 
   defp decode_basic_auth(conn) do
