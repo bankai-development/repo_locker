@@ -18,18 +18,23 @@ defmodule RepoLocker.Servers.GithubMockServer do
   get "/healthz" do
     success(conn, Jason.encode!(%{"status" => "alive"}))
   end
-  
+
   put "/repos/bad-owner/:repo/branches/:branch/protection" do
     failure(conn)
   end
 
   put "/repos/:owner/:repo/branches/:branch/protection" do
-    bindings = [owner: conn.params["owner"], repo: conn.params["repo"], branch: conn.params["branch"]]
+    bindings = [
+      owner: conn.params["owner"],
+      repo: conn.params["repo"],
+      branch: conn.params["branch"]
+    ]
+
     "repos/branches/update_branch_protection.json"
     |> json_response(bindings)
     |> success(conn)
   end
-  
+
   defp success(body, conn) do
     conn
     |> Plug.Conn.send_resp(200, body)
@@ -42,8 +47,8 @@ defmodule RepoLocker.Servers.GithubMockServer do
 
   defp json_response(path_to_file, bindings) do
     [@response_base_path, path_to_file]
-    |> Enum.join
-    |> Path.expand
+    |> Enum.join()
+    |> Path.expand()
     |> EEx.eval_file(bindings)
   end
 end

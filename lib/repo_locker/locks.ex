@@ -5,12 +5,12 @@ defmodule RepoLocker.Locks do
   """
   @enforce_keys [:branch, :enforce_admins, :require_code_owner_reviews, :repo]
   defstruct [:branch, :enforce_admins, :require_code_owner_reviews, :repo, :restrictions]
-  
+
   @type t :: %RepoLocker.Locks{
-    branch: String.t,
-    enforce_admins: boolean,
-    repo: String.t,
-    require_code_owner_reviews: boolean,
-    restrictions: map
-  }
+          branch: String.t(),
+          enforce_admins: boolean,
+          repo: String.t(),
+          require_code_owner_reviews: boolean,
+          restrictions: map
+        }
 end
