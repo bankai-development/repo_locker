@@ -15,12 +15,9 @@ defmodule RepoLocker.MixProject do
     [
       extra_applications: [:logger],
       mod: {RepoLocker.Application, [env: Mix.env()]},
-      applications: applications(Mix.env())
+      applications: [:httpoison, :cowboy, :plug]
     ]
   end
-
-  defp applications(:test), do: applications(:default) ++ [:cowboy, :plug]
-  defp applications(_), do: [:httpoison]
 
   defp deps do
     [

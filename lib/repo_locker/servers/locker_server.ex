@@ -4,12 +4,21 @@ defmodule RepoLocker.Servers.LockerServer do
   """
   use Plug.Router
 
+  if Mix.env() == :dev do
+    use Plug.Debugger
+  end
+
+  if Mix.env() == :prod do
+    plug(Plug.SSL, rewrite_on: [:x_forwarded_proto])
+  end
+
   plug(Plug.Parsers,
     parsers: [:json],
     pass: ["*/*"],
     json_decoder: Jason
   )
 
+  plug(Plug.Logger)
   plug(:match)
   plug(:dispatch)
 

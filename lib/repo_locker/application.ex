@@ -26,11 +26,11 @@ defmodule RepoLocker.Application do
     Supervisor.start_link(children, opts)
   end
 
-  defp locker_server do
+  def locker_server() do
     Plug.Cowboy.child_spec(
       scheme: :http,
       plug: RepoLocker.Servers.LockerServer,
-      options: [port: 8080]
+      options: [port: System.get_env()["PORT"] || 4000]
     )
   end
 end
