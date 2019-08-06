@@ -32,12 +32,18 @@ Make sure you create a personal access token you can locate it by logging into G
 
 You just want to give this user repo access.
 
-### Option 1 - Get Running Quickly for Development
+### Get Running Quickly for **Development**
 
 ```elixir
 mix deps.get
 mix run --no-halt
 ```
+
+### Option 1 - Get Running Quickly on Heroku
+
+If you have a [Heroku](http://www.heroku.com/) account deploy to Heroku using this deploy button:
+
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/bankai-development/repo_locker)
 
 ### Option 2 - Compile and Release for Production
 
@@ -61,7 +67,7 @@ docker run -p 4000:4000 repo_locker bin/repo_locker start
 
 ### Don't Forget Webhook Settings
 
-Make sure you set your organization settings to point to your server. 
+Make sure you set your organization settings to point to your server.
 
 You will go into your organization and go to *Organization Settings -> Webhooks -> Add Webhook* .
 
@@ -69,9 +75,16 @@ Your Payload URL will look something like:
 
 `https://<REPO_LOCKER_USER>:<REPO_LOCKER_PASS>@<your-app-url>/notifications`
 
+![Add Webhook Example](/docs/add_webhook.png)
+
+Also make sure that you have your events options setup to receive
+repository creation events.
+
 ## Things to Consider
 
-This application forces SSL redirects in prod. For now you need to sit the application on a platform that handles SSL until native support is added.
+- This application forces SSL redirects in prod. For now you need to sit the application on a platform that handles SSL until native support is added.
+
+- This application will only respond to `/healthz` and `/notifications` and only returns `404s` to notifications that is does not handle.
 
 ## Todo
 
