@@ -5,7 +5,8 @@ defmodule RepoLocker.Application do
   use Application
 
   def start(_type, args) do
-    Logger.info("Starting Repo Locker ...")
+    port = System.get_env("PORT", "4000")
+    Logger.info("Starting Repo Locker on PORT #{port} ...")
 
     children =
       case args do
@@ -23,7 +24,7 @@ defmodule RepoLocker.Application do
             Plug.Cowboy.child_spec(
               scheme: :http,
               plug: RepoLocker.Servers.LockerServer,
-              options: [port: System.get_env()["PORT"] || 4000]
+              options: [port: String.to_integer(port)]
             )
           ]
       end
