@@ -6,6 +6,9 @@ Web application written in Elixir that listens for the creation of a repository 
 
 ## Variables
 
+- GITHUB_TOKEN (required in prod environment)
+  - You need this for RepoLocker to access your Github account. I recommend creating a new token.
+
 - REPO_LOCKER_USER (required in prod environment)
   - Basic Auth Username
 
@@ -21,6 +24,10 @@ Web application written in Elixir that listens for the creation of a repository 
 ## Getting Started
 
 To get this application up and running set the environment variables above and you have multiple options.
+
+Make sure you create a personal access token you can locate it by logging into Gihub and going to [Settings -> Developer settings -> Personal access tokens](https://github.com/settings/tokens). From here you can generate a token for your instance of the RepoLocker application.
+
+You just want to give this user repo access.
 
 ### 1. Get Running Quickly for Development
 

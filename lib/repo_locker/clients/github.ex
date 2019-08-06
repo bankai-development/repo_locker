@@ -30,7 +30,7 @@ defmodule RepoLocker.Clients.Github do
 
   # Implementation Details
   def base_url do
-    System.get_env("GITHUB_BASE_URL", "https://api.github.com/")
+    System.get_env("GITHUB_BASE_URL", "https://api.github.com")
   end
 
   def process_url(url) do
