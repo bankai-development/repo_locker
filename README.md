@@ -22,15 +22,31 @@ Web application written in Elixir that listens for the creation of a repository 
 
 To get this application up and running set the environment variables above and you have multiple options.
 
-### 1. Quick and Easy Deploy to Heroku
+### 1. Get Running Quickly for Development
 
 ```elixir
+mix deps.get
+mix run --no-halt
 ```
 
-### 2. Get Running Quickly
+### 2. Compile and Release for Production
 
 ```elixir
-mix run --no-halt
+mix deps.get --only prod
+MIX_ENV=prod mix release
+
+# This will output instructions on running the application
+# after it creates a bin file which you can run like so:
+_build/dev/rel/my_app/bin/my_app start
+```
+
+### 3. Docker
+
+```elixir
+docker build . -t repo_locker:latest
+
+# Then you can run the application like normal with docker with something such as:
+docker run -p 4000:4000 repo_locker bin/repo_locker start
 ```
 
 ## Things to Consider
