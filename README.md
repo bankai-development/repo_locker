@@ -2,18 +2,18 @@
 
 ## Description
 
-Web application written in Elixir that listens for the creation of a repository for an organization and protects the master branch.
+Web application written in Elixir that listens for the creation of an organization's repository and protects it's master branch.
 
 ## Environment Variables
 
 - GITHUB_TOKEN (required in prod environment)
-  - You need this for RepoLocker to access your Github account. I recommend creating a new token.
+  - You need this for RepoLocker to access your Github account. I recommend creating a new token specifically for RepoLocker.
 
 - MIX_ENV - Application Environment
-  - default dev - options: [dev, prod, test])
+  - default **dev** when run locally should be **prod** for production.
 
 - MENTION_TARGET - Who to notify when issue created
-  - This is optional and will notify owner if you do not set a specific person to notify.
+  - This is optional and will notify the organization if you do not set a specific person to notify.
 
 - PORT - Port you want application to run on
   - default 4000
@@ -59,9 +59,10 @@ _build/dev/rel/my_app/bin/my_app start
 ### Option 3 - Docker
 
 ```elixir
+# you can tag it however you wish, just an example
 docker build . -t repo_locker:latest
 
-# Then you can run the application like normal with docker with something such as:
+# you can run the application like normal with docker with something such as:
 docker run -p 4000:4000 repo_locker bin/repo_locker start
 ```
 
@@ -69,15 +70,15 @@ docker run -p 4000:4000 repo_locker bin/repo_locker start
 
 Make sure you set your organization settings to point to your server.
 
-You will go into your organization and go to *Organization Settings -> Webhooks -> Add Webhook* .
+Go to your organization and then your settings from *Organization Settings -> Webhooks -> Add Webhook* .
 
-Your Payload URL will look something like:
+Your Payload URL should look like:
 
 `https://<REPO_LOCKER_USER>:<REPO_LOCKER_PASS>@<your-app-url>/notifications`
 
 ![Add Webhook Example](/docs/add_webhook.png)
 
-Also make sure that you have your events options setup to receive
+Make sure that you have your events options setup to receive
 repository creation events.
 
 ## Things to Consider

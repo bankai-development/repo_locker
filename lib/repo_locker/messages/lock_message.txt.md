@@ -1,4 +1,4 @@
-@<%=mention%> this repositories branch has been automatically locked.
+@<%=mention%> this repository's master branch has been automatically locked.
 
 The following settings were enabled:
 
