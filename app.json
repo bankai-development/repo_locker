@@ -3,9 +3,7 @@
 	"description": "Automatically lock your repos on creation.",
 	"repository": "https://github.com/bankai-development/repo_locker",
 	"addons": [],
-	"buildpacks": [{
-		"url": "https://github.com/HashNuke/heroku-buildpack-elixir.git"
-	}],
+	"stack": "container",
 	"formation": {
 		"web": {
 			"quantity": 1,
@@ -13,7 +11,14 @@
 		}
 	},
 	"env": {
+    "GITHUB_TOKEN":{
+			"value": "github-token",
+			"required": true
+    },
 		"MIX_ENV": "prod",
+		"MENTION_TARGET": {
+      "required": true
+    },
 		"REPO_LOCKER_USER": {
 			"value": "repo-locker-user",
 			"required": true
