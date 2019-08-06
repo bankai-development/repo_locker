@@ -4,7 +4,7 @@ defmodule RepoLocker.Authentication do
   """
   import Plug.Conn
 
-  @env Mix.env
+  @env Mix.env()
 
   def init(options), do: options
 

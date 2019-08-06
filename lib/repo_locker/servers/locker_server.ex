@@ -11,7 +11,7 @@ defmodule RepoLocker.Servers.LockerServer do
   end
 
   plug(Plug.Parsers,
-    parsers: [:json],
+    parsers: [:urlencoded, :json],
     pass: ["*/*"],
     json_decoder: Jason
   )
@@ -35,9 +35,12 @@ defmodule RepoLocker.Servers.LockerServer do
     |> Plug.Conn.send_resp()
   end
 
-  def process({"x-github-event", "repository"}, conn) do
-    with {:ok, "created"} <- {:ok, conn.body_params["action"]},
-         {:ok, owner, repo} <- repo_info_from_params(conn),
+  def process({"x-github-event", "create"}, conn) do
+    payload_params = payload_params(conn)
+
+    with {:ok, "branch"} <- {:ok, payload_params["ref_type"]},
+         {:ok, "master"} <- {:ok, payload_params["ref"]},
+         {:ok, owner, repo} <- repo_info_from_params(payload_params),
          {:ok, _locks} <- RepoLocker.lock(owner, repo) do
       no_content(conn)
     else
@@ -65,8 +68,11 @@ defmodule RepoLocker.Servers.LockerServer do
     |> Plug.Conn.send_resp()
   end
 
-  defp repo_info_from_params(conn) do
-    {:ok, conn.body_params["repository"]["owner"]["login"],
-     conn.body_params["repository"]["name"]}
+  defp payload_params(conn) do
+    conn.params["payload"] |> Jason.decode!()
+  end
+
+  defp repo_info_from_params(params) do
+    {:ok, params["repository"]["owner"]["login"], params["repository"]["name"]}
   end
 end

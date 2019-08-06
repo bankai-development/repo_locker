@@ -34,7 +34,7 @@ defmodule RepoLocker.Servers.GithubMockServer do
     |> json_response(bindings)
     |> success(conn)
   end
-  
+
   post "/repos/bad-owner/:repo/issues" do
     failure(conn)
   end
@@ -44,7 +44,6 @@ defmodule RepoLocker.Servers.GithubMockServer do
     |> json_response([])
     |> success(conn, 201)
   end
-
 
   defp success(body, conn, code \\ 200) do
     conn

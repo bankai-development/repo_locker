@@ -13,9 +13,12 @@ defmodule RepoLocker.Server.LockerServerTest do
   defp read_example(filename) do
     filepath = Path.expand("./test/servers/example_requests/" <> filename)
 
-    filepath
-    |> File.read!()
-    |> Jason.decode!()
+    data =
+      filepath
+      |> File.read!()
+      |> Jason.decode!()
+
+    %{"payload" => data}
   end
 
   test "server returns healthy and 200" do
@@ -26,11 +29,13 @@ defmodule RepoLocker.Server.LockerServerTest do
 
   test "call lock on a repository when receiving a callback" do
     event_data = read_example("repository_webhook_event.json")
-    conn = conn(:post, "/notifications", event_data)
+    event_data_json = Map.put(event_data, "payload", Jason.encode!(event_data["payload"]))
+    conn = conn(:post, "/notifications", event_data_json)
 
     conn =
       conn
-      |> set_event_header("repository")
+      |> put_resp_content_type("application/x-www-form-urlencoded")
+      |> set_event_header("create")
       |> LockerServer.call(@server)
 
     assert conn.status == 204
@@ -38,13 +43,15 @@ defmodule RepoLocker.Server.LockerServerTest do
 
   test "do not respond to any other repository action type" do
     event_data = read_example("repository_webhook_event.json")
-    event_data_changed = Map.put(event_data, "action", "not-created-value")
+    updated_data = Map.put(event_data["payload"], "ref_type", "tag")
+    event_data_changed = %{"payload" => Jason.encode!(updated_data)}
 
     conn = conn(:post, "/notifications", event_data_changed)
 
     conn =
       conn
-      |> set_event_header("repository")
+      |> put_resp_content_type("application/x-www-form-urlencoded")
+      |> set_event_header("create")
       |> LockerServer.call(@server)
 
     assert conn.status == 404
