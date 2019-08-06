@@ -30,10 +30,11 @@ RUN mix release
 FROM alpine:3.9 AS app
 RUN apk add --update bash openssl
 
-RUN mkdir /app
+RUN mkdir -p /app/lib/repo_locker/messages
 WORKDIR /app
 
 COPY --from=build /app/_build/prod/rel/repo_locker ./
+COPY --from=build /app/lib/repo_locker/messages/ ./app/lib/repo_locker/messages/
 RUN chown -R nobody: /app
 USER nobody
 
