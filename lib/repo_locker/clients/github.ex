@@ -7,15 +7,21 @@ defmodule RepoLocker.Clients.Github do
   # API
   def lock(user, repo) do
     lock_settings_json = Jason.encode!(lock_settings())
-
-    case __MODULE__.put!(
-           "/repos/#{user}/#{repo}/branches/master/protection",
-           lock_settings_json,
-           [],
-           []
-         ) do
+    response = __MODULE__.put!("/repos/#{user}/#{repo}/branches/master/protection", lock_settings_json, [], [])
+    case response do
       %{:status_code => 200, :body => body} ->
         {:ok, translate_locks(body)}
+
+      %{:status_code => _status, :body => body} ->
+        {:error, body["message"]}
+    end
+  end
+
+  def create_issue(user, repo, message) do
+    response = __MODULE__.post!("/repos/#{user}/#{repo}/issues", Jason.encode!(message), [], [])
+    case response do
+      %{:status_code => 201, :body => body} ->
+        {:ok, body}
 
       %{:status_code => _status, :body => body} ->
         {:error, body["message"]}
@@ -29,6 +35,25 @@ defmodule RepoLocker.Clients.Github do
 
   def process_url(url) do
     base_url() <> url
+  end
+
+  def default_headers do
+    token = "token " <> System.get_env("GITHUB_TOKEN", "")
+    %{
+      "Accept" => "application/vnd.github.v3+json",
+      "Content-Type" => "application/json",
+      "Authorization" => token
+    } 
+  end
+
+  def process_request_headers(headers) when is_map(headers) do
+    default_headers()
+    |> Map.merge(headers)
+    |> Map.to_list
+  end
+  
+  def process_request_headers(_headers) do
+    Map.to_list(default_headers())
   end
 
   def process_response_body(body) do

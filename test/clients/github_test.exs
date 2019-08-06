@@ -13,4 +13,14 @@ defmodule RepoLocker.Clients.GithubTest do
              }
            }
   end
+
+  test "create issue" do
+    {:ok, response} = Github.create_issue("ocotocat", "Hello-World", %{"title" => "Found a bug"})
+    assert response["title"] == "Found a bug"
+  end
+  
+  test "create issue handle error" do
+    {:error, response} = Github.create_issue("bad-owner", "Hello-World", %{"title" => "Found a bug"})
+    assert response == "error message"
+  end
 end
